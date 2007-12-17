@@ -15,7 +15,6 @@ Source0:	linux-%{version}.tar.bz2
 Source1:	%{name}-config.bz2
 License:	GPL
 Url:		http://user-mode-linux.sourceforge.net/
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	glibc-static-devel
 
 %description
