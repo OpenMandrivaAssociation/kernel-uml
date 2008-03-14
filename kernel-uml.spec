@@ -1,6 +1,6 @@
 %define	name	kernel-uml
 
-%define	version	2.6.16
+%define	version	2.6.24.3
 %define	release	%mkrel 1
 
 %define	Summary	The user mode linux kernel
@@ -17,6 +17,7 @@ License:	GPL
 Url:		http://user-mode-linux.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	glibc-static-devel
+BuildRequires:  pcap-devel
 
 %description
 User-Mode Linux is a safe, secure way of running Linux versions and
@@ -37,7 +38,7 @@ computer, or its software.
 bzcat %SOURCE1 > .config
 
 %build
-%make oldconfig ARCH=um
+yes '' | %make oldconfig ARCH=um
 make linux ARCH=um
 
 %install
