@@ -1,6 +1,6 @@
 %define	name	kernel-uml
 
-%define	version	2.6.24.3
+%define	version	2.6.25
 %define	release	%mkrel 1
 
 %define	Summary	The user mode linux kernel
