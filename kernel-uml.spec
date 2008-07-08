@@ -4,7 +4,7 @@
 %define patchversion 10
 
 %define rpmversion %{kversion}%{?patchversion:.%{patchversion}}
-%define	release	%mkrel 1
+%define	release	%mkrel 2
 
 %define	Summary	The user mode linux kernel
 
@@ -78,9 +78,9 @@ make linux ARCH=um
 rm -rf $RPM_BUILD_ROOT
 %__mkdir_p %buildroot/%_bindir
 
-%__cp linux %buildroot/%_bindir/%name-%version-%release
+%__cp linux %buildroot/%_bindir/%name-%kversion
 cd %buildroot/%_bindir
-%__ln_s %name-%version-%release %name
+%__ln_s %name-%kversion %name
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -92,5 +92,5 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{name}-%{rpmversion}
 %defattr(-,root,root)
 %doc Documentation/uml
-%_bindir/%name-%version-%release
+%_bindir/%name-%kversion
 
