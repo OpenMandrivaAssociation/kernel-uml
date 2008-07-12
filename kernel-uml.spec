@@ -1,10 +1,11 @@
-%define	name	kernel-uml
+%define kname   kernel-uml
+%define	name	%{kname}
 
 %define	kversion	2.6.25
 %define patchversion 10
 
 %define rpmversion %{kversion}%{?patchversion:.%{patchversion}}
-%define	release	%mkrel 4
+%define	release	%mkrel 5
 
 %define	Summary	The user mode linux kernel
 
@@ -26,7 +27,7 @@ Url:		http://user-mode-linux.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	glibc-static-devel
 BuildRequires:  pcap-devel
-Requires: %{name}-%{rpmversion}-%{_build_arch} = 1-%{release}
+Requires:       %{kname}-%{_build_arch} = %{version}-%{release}
 
 %description
 User-Mode Linux is a safe, secure way of running Linux versions and
@@ -42,13 +43,13 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package -n %{name}-%{rpmversion}-%{_build_arch}
+%package    %{_build_arch}-%{rpmversion}
 Group:		System/Kernel and hardware
 Version:    1
 Summary:	%{Summary}
 Requires:   uml-utilities
 
-%description -n %{name}-%{rpmversion}-%{_build_arch}
+%description %{_build_arch}-%{rpmversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -62,11 +63,12 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package -n %{name}-%{_build_arch}
+%package    %{_build_arch}
 Group:		System/Kernel and hardware
 Summary:	%{Summary}
+Requires:   %{kname}-%{_build_arch}-%{rpmversion} = 1-%{release}
 
-%description -n %{name}-%{_build_arch}
+%description %{_build_arch}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -113,7 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %_bindir/%name-%{_build_arch}
 
-%files -n %{name}-%{rpmversion}-%{_build_arch}
+%files %{_build_arch}-%{rpmversion}
 %defattr(-,root,root)
 %doc Documentation/uml
 %_bindir/%name-%rpmversion-%{_build_arch}
