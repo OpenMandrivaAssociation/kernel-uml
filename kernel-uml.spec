@@ -4,7 +4,7 @@
 %define patchversion 10
 
 %define rpmversion %{kversion}%{?patchversion:.%{patchversion}}
-%define	release	%mkrel 2
+%define	release	%mkrel 3
 
 %define	Summary	The user mode linux kernel
 
@@ -44,8 +44,9 @@ computer, or its software.
 
 %package -n %{name}-%{rpmversion}
 Group:		System/Kernel and hardware
-Version: 1
+Version:    1
 Summary:	%{Summary}
+Requires:   uml-utilities
 
 %description -n %{name}-%{rpmversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
@@ -78,9 +79,9 @@ make linux ARCH=um
 rm -rf $RPM_BUILD_ROOT
 %__mkdir_p %buildroot/%_bindir
 
-%__cp linux %buildroot/%_bindir/%name-%kversion
+%__cp linux %buildroot/%_bindir/%name-%rpmversion
 cd %buildroot/%_bindir
-%__ln_s %name-%kversion %name
+%__ln_s %name-%rpmversion %name
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -92,5 +93,5 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{name}-%{rpmversion}
 %defattr(-,root,root)
 %doc Documentation/uml
-%_bindir/%name-%kversion
+%_bindir/%name-%rpmversion
 
