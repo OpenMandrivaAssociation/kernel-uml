@@ -1,11 +1,11 @@
 %define kname   kernel-uml
 %define	name	%{kname}
 
-%define	kversion	2.6.25
-%define patchversion 10
+%define	kversion	2.6.26
+#define patchversion 10
 
 %define rpmversion %{kversion}%{?patchversion:.%{patchversion}}
-%define	release	%mkrel 5
+%define	release	%mkrel 1
 
 %define	Summary	The user mode linux kernel
 
@@ -20,14 +20,12 @@ Source1:	%{name}-config.bz2
 %if %{?patchversion:1}%{?!patchversion:0}
 Patch0:     patch-%{kversion}.%{patchversion}.bz2
 %endif
-Patch1:     kernel-2.6.25.10-PATH_MAX.patch
-Patch2:     kernel-2.6.25.10-gcc-43-inline.patch
 License:	GPL
 Url:		http://user-mode-linux.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	glibc-static-devel
 BuildRequires:  pcap-devel
-Requires:       %{kname}-%{_build_arch} = %{version}-%{release}
+Requires:       %{kname}-%{_target_cpu} = %{version}-%{release}
 
 %description
 User-Mode Linux is a safe, secure way of running Linux versions and
@@ -43,13 +41,13 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package    %{_build_arch}-%{rpmversion}
+%package    %{_target_cpu}-%{rpmversion}
 Group:		System/Kernel and hardware
 Version:    1
 Summary:	%{Summary}
 Requires:   uml-utilities
 
-%description %{_build_arch}-%{rpmversion}
+%description %{_target_cpu}-%{rpmversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -63,12 +61,12 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package    %{_build_arch}
+%package    %{_target_cpu}
 Group:		System/Kernel and hardware
 Summary:	%{Summary}
-Requires:   %{kname}-%{_build_arch}-%{rpmversion} = 1-%{release}
+Requires:   %{kname}-%{_target_cpu}-%{rpmversion} = 1-%{release}
 
-%description %{_build_arch}
+%description %{_target_cpu}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -87,8 +85,6 @@ computer, or its software.
 %if %{?patchversion:1}%{?!patchversion:0}
 %patch0 -p1
 %endif
-%patch1 -p0 -b .path_max
-%patch2 -p0 -b .inline
 bzcat %SOURCE1 > .config
 
 %build
@@ -99,10 +95,10 @@ make linux ARCH=um
 rm -rf $RPM_BUILD_ROOT
 %__mkdir_p %buildroot/%_bindir
 
-%__cp linux %buildroot/%_bindir/%name-%rpmversion-%{_build_arch}
+%__cp linux %buildroot/%_bindir/%name-%rpmversion-%{_target_cpu}
 cd %buildroot/%_bindir
-%__ln_s %name-%rpmversion-%{_build_arch} %name
-%__ln_s %name-%rpmversion-%{_build_arch} %name-%{_build_arch}
+%__ln_s %name-%rpmversion-%{_target_cpu} %name
+%__ln_s %name-%rpmversion-%{_target_cpu} %name-%{_target_cpu}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -111,12 +107,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %_bindir/%name
 
-%files %{_build_arch}
+%files %{_target_cpu}
 %defattr(-,root,root)
-%_bindir/%name-%{_build_arch}
+%_bindir/%name-%{_target_cpu}
 
-%files %{_build_arch}-%{rpmversion}
+%files %{_target_cpu}-%{rpmversion}
 %defattr(-,root,root)
 %doc Documentation/uml
-%_bindir/%name-%rpmversion-%{_build_arch}
+%_bindir/%name-%rpmversion-%{_target_cpu}
 
