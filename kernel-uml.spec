@@ -3,7 +3,7 @@
 
 %define	kversion	2.6.26
 #define patchversion 10
-%define rel 2
+%define rel 3
 
 %define mdvk %{rel}mdv
 %define kernelversionappend -uml.%{mdvk}
@@ -13,6 +13,8 @@
 
 %define	Summary	The user mode linux kernel
 
+%define bmodulesv %{?!_without_modules:1}%{?_without_modules:0}
+
 Summary:	%{Summary}
 Name:		%{name}
 Version:	%{rpmversion}
@@ -20,8 +22,7 @@ Release:	%{release}
 Group:		System/Kernel and hardware
 
 Source0:	linux-%{kversion}.tar.bz2
-Source1:	%{name}-config
-Source2:    %{name}-mod-config
+Source1:    %{name}-config
 Source50:   README.mdv
 %if %{?patchversion:1}%{?!patchversion:0}
 Patch0:     patch-%{kversion}.%{patchversion}.bz2
@@ -113,28 +114,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %__mkdir_p %buildroot/%_bindir
 
-# Step 1: kernel w/o modules
-cat %SOURCE1 | sed 's/^CONFIG_LOCALVERSION=/CONFIG_LOCALVERSION="%{kernelversionappend}"/' > .config
-yes '' | %make oldconfig ARCH=um
-%make linux ARCH=um
-
-
-%__cp linux %buildroot/%_bindir/%name-%{_target_cpu}-%mdvkversion
-(
-cd %buildroot/%_bindir
-%__ln_s %name-%{_target_cpu}-%mdvkversion linux-%{_target_cpu}-%mdvkversion
-
-%__ln_s %name-%{_target_cpu}-%mdvkversion %name-%{_target_cpu}
-%__ln_s %name-%{_target_cpu} linux-%{_target_cpu}
-
-%__ln_s %name-%{_target_cpu} %name
-%__ln_s %name linux
-)
-
-%make clean
-
-# Step 2: kernel w/ modules
-cat %SOURCE2 | sed 's/^CONFIG_LOCALVERSION=/CONFIG_LOCALVERSION="%{kernelversionappend}"/' > .config
+%if %bmodulesv
+# Step 1: kernel w/ modules
+cat %SOURCE1 | \
+    sed 's/^CONFIG_LOCALVERSION=/CONFIG_LOCALVERSION="%{kernelversionappend}"/' \
+    > .config
 
 yes '' | %make oldconfig ARCH=um
 %make modules linux ARCH=um
@@ -152,6 +136,35 @@ cd %buildroot/%_bindir
 %__ln_s %name-mod linux-mod
 )
 
+%make clean ARCH=um
+rm -f .version
+%endif
+
+# Step 2: kernel w/o modules
+
+cat %SOURCE1 | \
+    sed 's/^CONFIG_LOCALVERSION=/CONFIG_LOCALVERSION="%{kernelversionappend}"/' | \
+    sed 's/^CONFIG_MODULES.*/# CONFIG_MODULES is not set/' \
+    > .config
+
+yes '' | %make oldconfig ARCH=um
+%make linux ARCH=um
+
+%__cp linux %buildroot/%_bindir/%name-%{_target_cpu}-%mdvkversion
+(
+cd %buildroot/%_bindir
+%__ln_s %name-%{_target_cpu}-%mdvkversion linux-%{_target_cpu}-%mdvkversion
+
+%__ln_s %name-%{_target_cpu}-%mdvkversion %name-%{_target_cpu}
+%__ln_s %name-%{_target_cpu} linux-%{_target_cpu}
+
+%__ln_s %name-%{_target_cpu} %name
+%__ln_s %name linux
+)
+
+%make clean ARCH=um
+rm -f .version
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -160,16 +173,20 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.mdv
 %_bindir/%name
 %_bindir/linux
+%if %bmodulesv
 %_bindir/%name-mod
 %_bindir/linux-mod
+%endif
 
 %files %{_target_cpu}
 %defattr(-,root,root)
 %doc README.mdv
 %_bindir/%name-%{_target_cpu}
 %_bindir/linux-%{_target_cpu}
+%if %bmodulesv
 %_bindir/%name-mod-%{_target_cpu}
 %_bindir/linux-mod-%{_target_cpu}
+%endif
 
 %files %{_target_cpu}-%{mdvkversion}
 %defattr(-,root,root)
@@ -177,10 +194,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.mdv
 %_bindir/%name-%{_target_cpu}-%mdvkversion
 %_bindir/linux-%{_target_cpu}-%mdvkversion
+%if %bmodulesv
 %_bindir/%name-mod-%{_target_cpu}-%mdvkversion
 %_bindir/linux-mod-%{_target_cpu}-%mdvkversion
+%endif
 
+%if %bmodulesv
 %files modules-%{mdvkversion}
 %defattr(-,root,root)
 %doc README.mdv
 /lib/modules/*
+%endif
