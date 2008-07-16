@@ -49,7 +49,6 @@ computer, or its software.
 
 %package    %{_target_cpu}-%{mdvkversion}
 Group:		System/Kernel and hardware
-Version:    1
 Summary:	%{Summary}
 Requires:   uml-utilities
 
