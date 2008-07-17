@@ -136,6 +136,8 @@ cd %buildroot/%_bindir
 %__ln_s %name-mod linux-mod
 )
 
+cp .config config-mod-%{_target_cpu}-%mdvkversion
+
 %make clean ARCH=um
 rm -f .version
 %endif
@@ -161,6 +163,8 @@ cd %buildroot/%_bindir
 %__ln_s %name-%{_target_cpu} %name
 %__ln_s %name linux
 )
+
+cp .config config-%{_target_cpu}-%mdvkversion
 
 %make clean ARCH=um
 rm -f .version
@@ -194,14 +198,17 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.mdv
 %_bindir/%name-%{_target_cpu}-%mdvkversion
 %_bindir/linux-%{_target_cpu}-%mdvkversion
+%doc config-%{_target_cpu}-%mdvkversion
 %if %bmodulesv
 %_bindir/%name-mod-%{_target_cpu}-%mdvkversion
 %_bindir/linux-mod-%{_target_cpu}-%mdvkversion
+%doc config-mod-%{_target_cpu}-%mdvkversion
 %endif
 
 %if %bmodulesv
 %files modules-%{mdvkversion}
 %defattr(-,root,root)
 %doc README.mdv
+%doc config-mod-%{_target_cpu}-%mdvkversion
 /lib/modules/*
 %endif
