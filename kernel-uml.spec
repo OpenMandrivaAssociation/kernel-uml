@@ -3,7 +3,7 @@
 
 %define	kversion	2.6.26
 #define patchversion 10
-%define rel 3
+%define rel 4
 
 %define mdvk %{rel}mdv
 %define kernelversionappend -uml.%{mdvk}
@@ -48,12 +48,12 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package    %{_target_cpu}-%{mdvkversion}
+%package    %{_target_cpu}
 Group:		System/Kernel and hardware
 Summary:	%{Summary}
-Requires:   uml-utilities
+Requires:   %{kname}-%{_target_cpu}-%{mdvkversion}
 
-%description %{_target_cpu}-%{mdvkversion}
+%description %{_target_cpu}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -67,12 +67,14 @@ the hardware access you want it to have. With properly limited access,
 nothing you do on the virtual machine can change or damage your real
 computer, or its software.
 
-%package    %{_target_cpu}
+%package    %{_target_cpu}-%{mdvkversion}
 Group:		System/Kernel and hardware
 Summary:	%{Summary}
-Requires:   %{kname}-%{_target_cpu}-%{mdvkversion} = 1-%{release}
+Requires:   uml-utilities
+Version:    1
+Release:    %mkrel 1
 
-%description %{_target_cpu}
+%description %{_target_cpu}-%{mdvkversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
 Linux processes. Run buggy software, experiment with new Linux kernels
 or distributions, and poke around in the internals of Linux, all
@@ -90,6 +92,8 @@ computer, or its software.
 Group:		System/Kernel and hardware
 Summary:	Kernel module for UML kernel
 AutoReqProv: No
+Version:    1
+Release:    %mkrel 1
 
 %description modules-%{mdvkversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
