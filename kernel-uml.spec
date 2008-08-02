@@ -2,8 +2,8 @@
 %define	name	%{kname}
 
 %define	kversion	2.6.26
-#define patchversion 10
-%define rel %mkrel 4
+%define patchversion 1
+%define rel %mkrel 1
 
 %define mdvk %{rel}
 %define kernelversionappend -uml.%{mdvk}
