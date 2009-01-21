@@ -2,7 +2,7 @@
 %define	name	%{kname}
 
 %define	kversion	2.6.28
-# %%define patchversion 6
+%define patchversion 1
 %define rel %mkrel 1
 
 %define mdvk %{rel}
@@ -26,6 +26,9 @@ Source1:    %{name}-config
 Source50:   README.mdv
 %if %{?patchversion:1}%{?!patchversion:0}
 Patch0:     patch-%{kversion}.%{patchversion}.bz2
+# upstream patch
+# Signed-off-by: WANG Cong <wangcong[at]zeuux.org>
+Patch1:     link-error.patch
 %endif
 License:	GPL
 Url:		http://user-mode-linux.sourceforge.net/
@@ -112,6 +115,7 @@ This package has to be installed inside the VM, not on your system !
 %if %{?patchversion:1}%{?!patchversion:0}
 %patch0 -p1
 %endif
+%patch1 -p0
 cp %SOURCE50 ./
 
 %build
