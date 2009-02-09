@@ -2,7 +2,7 @@
 %define	name	%{kname}
 
 %define	kversion	2.6.28
-%define patchversion 2
+%define patchversion 4
 %define rel %mkrel 1
 
 %define mdvk %{rel}
