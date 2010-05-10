@@ -1,8 +1,8 @@
 %define kname   kernel-uml
 %define	name	%{kname}
 
-%define	kversion	2.6.29
-%define patchversion 2
+%define	kversion 2.6.33
+%define patchversion 3
 %define rel %mkrel 1
 
 %define mdvk %{rel}
