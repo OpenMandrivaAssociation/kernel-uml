@@ -3,7 +3,7 @@
 
 %define	kversion 2.6.33
 %define patchversion 3
-%define rel %mkrel 1
+%define rel %mkrel 2
 
 %define mdvk %{rel}
 %define kernelversionappend -uml.%{mdvk}
@@ -72,7 +72,7 @@ Group:		System/Kernel and hardware
 Summary:	%{Summary}
 Requires:   uml-utilities
 Version:    1
-Release:    1
+Release:    2
 
 %description %{_target_cpu}-%{mdvkversion}
 User-Mode Linux is a safe, secure way of running Linux versions and
@@ -93,7 +93,7 @@ Group:		System/Kernel and hardware
 Summary:	Kernel module for UML kernel
 AutoReqProv: No
 Version:    1
-Release:    1
+Release:    2
 Provides:   %{kname}-modules
 
 %description modules-%{mdvkversion}
