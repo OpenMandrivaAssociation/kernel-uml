@@ -28,7 +28,7 @@ Source50:   README.mdv
 Patch0:     patch-%{kversion}.%{patchversion}.bz2
 %endif
 License:	GPL
-Url:		http://user-mode-linux.sourceforge.net/
+Url:		https://user-mode-linux.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	glibc-static-devel
 BuildRequires:  pcap-devel
