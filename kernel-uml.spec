@@ -30,6 +30,7 @@ Patch0:     patch-%{kversion}.%{patchversion}.bz2
 License:	GPL
 Url:		https://user-mode-linux.sourceforge.net/
 BuildRoot:	%{_tmppath}/%{name}-buildroot
+BuildRequires:	make
 BuildRequires:	glibc-static-devel
 BuildRequires:  pcap-devel
 Requires:       %{kname}-%{_target_cpu} = %{version}-%{release}
