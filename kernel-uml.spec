@@ -3,13 +3,13 @@
 
 %define	kversion 2.6.33
 %define patchversion 3
-%define rel %mkrel 2
+%define rel 3
 
 %define mdvk %{rel}
 %define kernelversionappend -uml.%{mdvk}
 %define rpmversion %{kversion}%{?patchversion:.%{patchversion}}
 %define mdvkversion %{kversion}%{?patchversion:.%{patchversion}}.%{mdvk}
-%define	release	%rel
+%define	release %rel.1
 
 %define	Summary	The user mode linux kernel
 
